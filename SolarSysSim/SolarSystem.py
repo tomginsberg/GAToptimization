@@ -129,7 +129,7 @@ class Planet:
         ##Use Newton's Method to solve Kepler's Equation for Mean Anomaly
         #Seed E as M or as the last calculated E
         if self.E == None:
-            E = M;
+            E = M
         else:
             E = self.E
         #Newton's Method
@@ -143,20 +143,20 @@ class Planet:
         self.E = E
         
         #Find position in some arbitrary basis with P pointing towards periapsis
-        P = a * (math.cos(E) - e);
-        Q = a * math.sin(E) * math.sqrt(1 - math.pow(e, 2));
+        P = a * (math.cos(E) - e)
+        Q = a * math.sin(E) * math.sqrt(1 - math.pow(e, 2))
 
         ##Rotate into 3d in sun's reference frame
         #Rotate by argument of periapsis
-        x = math.cos(w) * P - math.sin(w) * Q;
-        y = math.sin(w) * P + math.cos(w) * Q;
+        x = math.cos(w) * P - math.sin(w) * Q
+        y = math.sin(w) * P + math.cos(w) * Q
         #Rotate by inclination
-        z = math.sin(i) * x;
-        x = math.cos(i) * x;
+        z = math.sin(i) * x
+        x = math.cos(i) * x
         #rotate by longitude of ascending node
-        xtemp = x;
-        x = math.cos(Lasc) * xtemp - math.sin(Lasc) * y;
-        y = math.sin(Lasc) * xtemp + math.cos(Lasc) * y;
+        xtemp = x
+        x = math.cos(Lasc) * xtemp - math.sin(Lasc) * y
+        y = math.sin(Lasc) * xtemp + math.cos(Lasc) * y
         
         return [x,y,z]
 
@@ -179,7 +179,7 @@ with open('keplerElements.csv') as csv_file:
     count = 0
     for row in csv_reader:
         if count != 0:
-            pCount = 1;
+            pCount = 1
             for p in planets:
                 if count == 1:
                     p.a = float(row[pCount])
