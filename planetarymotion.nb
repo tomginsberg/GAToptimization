@@ -1,0 +1,94 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      2733,         86]
+NotebookOptionsPosition[      2118,         69]
+NotebookOutlinePosition[      2475,         85]
+CellTagsIndexPosition[      2432,         82]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"ToExpression", "[", 
+  RowBox[{
+  "\"\<\\\\(y=a \\\\sqrt{1-\\\\varepsilon^{2}} \\\\sin \\\\psi\\\\)\>\"", ",",
+    "TeXForm"}], "]"}]], "Input",
+ CellChangeTimes->{{3.760821241741271*^9, 3.760821251770483*^9}, {
+  3.760821287692801*^9, 
+  3.760821316706884*^9}},ExpressionUUID->"2c61ca16-d7f8-46e9-a4ab-\
+836de4370f8a"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"y", "[", "\[Psi]_", "]"}], ":=", 
+  RowBox[{"a", " ", 
+   SqrtBox[
+    RowBox[{"1", "-", 
+     SuperscriptBox["\[Epsilon]", "2"]}]], 
+   RowBox[{"Sin", "[", " ", "\[Psi]", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.760821326338998*^9, 
+  3.760821344356546*^9}},ExpressionUUID->"cf51819e-1677-48fd-a179-\
+4b51168813c2"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"x", "[", "\[Psi]_", "]"}], ":=", 
+  RowBox[{"a", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "\[Epsilon]"}], "+", 
+     RowBox[{"Cos", "[", " ", "\[Psi]", "]"}]}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.760821294287224*^9, 3.7608213023420687`*^9}, {
+  3.760821351050551*^9, 
+  3.760821351768958*^9}},ExpressionUUID->"f4f324da-6b2b-4ea3-a289-\
+6c2510ae63ac"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"t", "[", "\[Psi]_", "]"}], ":=", 
+  FractionBox[
+   RowBox[{"T", " ", 
+    RowBox[{"(", 
+     RowBox[{"\[Psi]", "-", " ", 
+      RowBox[{"\[Epsilon]", "*", 
+       RowBox[{"Sin", "[", " ", "\[Psi]", "]"}]}]}], ")"}]}], 
+   RowBox[{"2", " ", "\[Pi]"}]]}]], "Input",
+ CellChangeTimes->{{3.7608212645871763`*^9, 3.760821270439272*^9}, 
+   3.760821354509556*^9},ExpressionUUID->"8049974e-deee-4cb3-a3f3-\
+06a95c11b899"]
+},
+WindowSize->{720, 855},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"11.2 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
+10, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 343, 8, 52, "Input",ExpressionUUID->"2c61ca16-d7f8-46e9-a4ab-836de4370f8a"],
+Cell[904, 30, 353, 10, 39, InheritFromParent,ExpressionUUID->"cf51819e-1677-48fd-a179-4b51168813c2"],
+Cell[1260, 42, 401, 11, 30, InheritFromParent,ExpressionUUID->"f4f324da-6b2b-4ea3-a289-6c2510ae63ac"],
+Cell[1664, 55, 450, 12, 49, InheritFromParent,ExpressionUUID->"8049974e-deee-4cb3-a3f3-06a95c11b899"]
+}
+]
+*)
+
