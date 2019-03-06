@@ -17,7 +17,7 @@ def setup():
     no_stroke()
 
 def draw():
-    background(0,0,0)
+    background(0,0,0,10)
     with push_matrix():
         translate(width/2, height/2)
         fill(253, 184, 19)
@@ -25,6 +25,6 @@ def draw():
         fill(255,255,255)
         for planet in planets:
             circle(planet.update_and_get_pos(), planet.s)
-            
+
 if __name__ == "__main__":
     run()
