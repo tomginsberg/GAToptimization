@@ -287,4 +287,5 @@ ax.plot(rs[0],rs[1],rs[2])
 ax.plot(ru[0],ru[1],ru[2])
 ax.plot(rn[0],rn[1],rn[2])
 ax.plot(rp[0],rp[1],rp[2])
+plt.show()
 
