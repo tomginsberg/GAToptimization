@@ -4,7 +4,7 @@ classdef Planet
         orbit_radius
         period
         name
-        mass
+        attractor
         phase
     end
     methods
