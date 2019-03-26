@@ -21,6 +21,12 @@ assists = randi(assistRange);
 %%Pick 100 random trajectories
 trajs = randi(5,100,assists);
 
+%Time range
+timeRange = [10, 1000];
+
+%Pick 100 random transfer times 
+times = randi(5,100,assists);
+
 
 %%Calculate fitness
 
