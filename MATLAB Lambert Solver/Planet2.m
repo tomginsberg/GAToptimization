@@ -1,7 +1,5 @@
 classdef Planet2
-    properties (GetAccess=private)
-        perihelion
-        aphelion
+    properties
         a
         aDot
         e
@@ -13,16 +11,11 @@ classdef Planet2
         long_asc
         long_ascDot
         E
-    end
-    properties
         planet_radius
-        orbit_radius
         mass     
     end
     methods
-        function obj = Planet2(perihelion,aphelion,a,aDot,e,eDot,long,longDot,long_peri,long_periDot,long_asc,long_ascDot,E, planet_radius, orbit_radius, mass)
-            obj.perihelion = perihelion;
-            obj.aphelion = aphelion;
+        function obj = Planet2(a,aDot,e,eDot,long,longDot,long_peri,long_periDot,long_asc,long_ascDot,planet_radius,mass)
             obj.a = a;
             obj.aDot = aDot;
             obj.e = e;
@@ -33,13 +26,12 @@ classdef Planet2
             obj.long_periDot = long_periDot;
             obj.long_asc = long_asc;
             obj.long_ascDot = long_ascDot;
-            obj.E = E;
             obj.planet_radius = planet_radius;
-            obj.orbit_radius = orbit_radius;
             obj.mass = mass;
+            obj.E = NaN;
         end
         %Time 0 is at J2000. Enter time in days after
-        function [x, y] = get_pos(obj, t)
+        function [x, y] = pos(obj, t)
             time = t / (365*100);
             
             Lmean = obj.long + obj.longDot * time;
@@ -54,7 +46,7 @@ classdef Planet2
 
             %Use Newton's Method to solve Kepler's Equation for Mean Anomaly
             %Seed E as M or as the last calculated E
-            if obj.E == None
+            if isnan(obj.E)
                 E = M;
             else
                 E = obj.E;
