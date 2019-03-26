@@ -19,7 +19,7 @@ clear
 px = [];
 py = [];
 t = 1;
-dt = 100;
+dt = 10;
 for i = 1:1000
     [px(i,1), py(i,1)] = earth.pos(t);
     [px(i,2), py(i,2)] = mercury.pos(t);
@@ -39,8 +39,8 @@ for i = 1:1000
     end
     
     plot(px(startPoint:i,:),py(startPoint:i,:));
-    xlim([-30 30])
-    ylim([-30 30])
+    xlim([-40 40])
+    ylim([-40 40])
     M(i) = getframe;
     t = t + dt;
 end

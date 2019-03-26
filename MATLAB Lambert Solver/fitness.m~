@@ -1,0 +1,12 @@
+function val = fitness(ship_velocity_in, ship_velocity_out, planet_velocity)
+    vx_in = ship_velocity_in(1);
+    vy_in = ship_velocity_in(2);
+    vx_out = ship_velocity_out(1);
+    vy_out = ship_velocity_out(2);
+    
+    vpx = planet_velocity(1);
+    vpy = planet_velocity(2);
+    
+    dotProd = dot(ship_velocity_in, planet_velocity);
+
+end
