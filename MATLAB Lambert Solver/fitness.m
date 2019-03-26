@@ -9,11 +9,10 @@ function val = fitness(ship_velocity_in, ship_velocity_out, planet_velocity)
     % bias toward assists that end with the ship leaving in the direction
     % as close as possible to the direction of the planet.
     
-    % In calculation of dirVal, take the normed ship velocities so it
-    % doesn't bias towards fast ship trajectories
+    % In calculation of dirVal, the velocities are normed so the output is
+    % between 0 and 1
 
-
-    dirVal = dot(ship_velocity_in/norm(ship_velocity_in), planet_velocity/norm(planet_velocity)) + dot(ship_velocity_out/norm(ship_velocity_out), planet_velocity/norm(planet_velocity));
+    dirVal = (dot(ship_velocity_in/norm(ship_velocity_in), planet_velocity/norm(planet_velocity)) + dot(ship_velocity_out/norm(ship_velocity_out), planet_velocity/norm(planet_velocity)))/2;
     thrust = norm(ship_velocity_out - planet_velocity) / norm(ship_velocity_in - planet_velocity);
     thrust = 1-abs(1-thrust);
     
