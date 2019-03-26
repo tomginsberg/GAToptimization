@@ -1,9 +1,8 @@
 classdef Planet
     properties
-        planet_radius
         orbit_radius
+        planet_radius
         period
-        name
         attractor
         phase
     end
