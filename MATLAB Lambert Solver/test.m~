@@ -15,31 +15,39 @@ clear
 [planets, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto] = initPlanets();
 px = [];
 py = [];
-n = 10000;
-t = linspace(1,pluto.period,n);
-sz = ones(1,9);
-for i = 1:n
-    for j = 1:9
-        [px(i,j) py(i,j)] = planets(j).pos(t(i));
-        sz(j) = planets(j).planet_radius / 100;
+t = 1;
+dt = 5;
+for i = 1:10000
+    if (t < 87.96926)
+        [px(i,2), py(i,2)] = mercury.pos(t);
     end
+    if (t < 224.70080)
+        [px(i,3), py(i,3)] = venus.pos(t);
+    end
+    [px(i,4), py(i,4)] = mars.pos(t);
+    [px(i,1), py(i,1)] = earth.pos(t);
+    [px(i,5), py(i,5)] = jupiter.pos(t);
+    [px(i,6), py(i,6)] = saturn.pos(t);
+    [px(i,7), py(i,7)] = uranus.pos(t);
+    [px(i,8), py(i,8)] = neptune.pos(t);
+    [px(i,9), py(i,9)] = pluto.pos(t);
+    t = t + dt;
 end
 
+plot(px, py, '--')
+xlim([-40 40])
+ylim([-40 40])
+hold on
+sz = linspace(20,100,9);
 for i = 1:1000
-    plot(px, py, '--')
-    hold on
     scatter(px(i,:), py(i,:), sz, 'r.');
-    xlim([-33 48])
-    ylim([-33 48])
-    
-    hold off
     if i < 21
         startPoint = i;
     else
         startPoint = i - 20;
     end
     
-    %plot(px(startPoint:i,:),py(startPoint:i,:));
+    plot(px(startPoint:i,:),py(startPoint:i,:));
     M(i) = getframe;
 end
 

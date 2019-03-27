@@ -12,10 +12,11 @@ classdef Planet2
         long_ascDot
         E
         planet_radius
-        mass     
+        mass
+        period
     end
     methods
-        function obj = Planet2(a,aDot,e,eDot,long,longDot,long_peri,long_periDot,long_asc,long_ascDot,planet_radius,mass)
+        function obj = Planet2(a,aDot,e,eDot,long,longDot,long_peri,long_periDot,long_asc,long_ascDot,planet_radius,mass,period)
             obj.a = a;
             obj.aDot = aDot;
             obj.e = e;
@@ -29,6 +30,7 @@ classdef Planet2
             obj.planet_radius = planet_radius;
             obj.mass = mass;
             obj.E = NaN;
+            obj.period = period;
         end
         
         %Time 0 is at J2000. Enter time in days after

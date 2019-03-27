@@ -6,7 +6,12 @@ Mars = Planet(2.3360709224817526e8, 3389.55, 686.97959, 42827.104, pi +.7);
 Jupiter = Planet(7.964720406084917e8, 69911.5, 4332.8201, 1.266827e8, pi/4 + .38);
 
 planets = [Mercury, Venus, Earth, Mars, Jupiter];
+
+%planets = initPlanets(); % More realistic planets...
+
 kstoauyear = 0.210805;
+muC = 1.327124e11; %Sun gravitational parameter in km^3/s^2
+AU =  149597870; % astronomical unit in km
 %%
 %%Starting planet 
 startPlanet = 3;

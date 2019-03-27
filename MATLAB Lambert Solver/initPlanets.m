@@ -12,25 +12,26 @@ long_asc = M(11,:) * pi/180;
 long_ascDot = M(12,:) * pi/180;
 mass = M(13,:);
 radius = M(14,:) / 2;
+period = M(15,:);
 
 i=1;
-mercury = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
+mercury = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i),period(i));
 i = i + 1;
-venus = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
+venus = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i),period(i));
 i = i + 1;
-earth = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
+earth = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i),period(i));
 i = i + 1;
-mars = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
+mars = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i),period(i));
 i = i + 1;
-jupiter = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
+jupiter = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i),period(i));
 i = i + 1;
-saturn = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
+saturn = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i),period(i));
 i = i + 1;
-uranus = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
+uranus = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i),period(i));
 i = i + 1;
-neptune = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
+neptune = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i),period(i));
 i = i + 1;
-pluto = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
+pluto = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i),period(i));
 
 planets = [mercury venus mars earth jupiter saturn uranus neptune pluto];
 end
