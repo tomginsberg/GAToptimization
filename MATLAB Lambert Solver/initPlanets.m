@@ -1,4 +1,4 @@
-function [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto] = initPlanets()
+function [planets, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto] = initPlanets()
 M = csvread('keplerElements.csv',1,1);
 a = M(1,:);
 aDot = M(2,:);
@@ -31,4 +31,6 @@ i = i + 1;
 neptune = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
 i = i + 1;
 pluto = Planet2(a(i),aDot(i),e(i),eDot(i),long(i),longDot(i),long_peri(i),long_periDot(i),long_asc(i),long_ascDot(i),radius(i),mass(i));
+
+planets = [mercury venus mars earth jupiter saturn uranus neptune pluto];
 end

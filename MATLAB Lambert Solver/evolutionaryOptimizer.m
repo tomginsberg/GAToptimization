@@ -10,10 +10,10 @@ kstoauyear = 0.210805;
 %%
 %%Starting planet 
 startPlanet = 3;
-%% Ending planet
+%%Ending planet
 endPlanet = 5;
 
-%% Number of gravity assists during the trajectory
+%%Number of gravity assists during the trajectory
 assistRange = [2,7];
 
 %%Generate a random number of assists
@@ -26,7 +26,6 @@ timeRange = [10, 1000];
 
 %Pick 100 random transfer times 
 times = randi(5,100,assists);
-
 
 %%Calculate fitness
 
