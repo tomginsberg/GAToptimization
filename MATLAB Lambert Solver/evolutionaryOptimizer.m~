@@ -47,9 +47,9 @@ for g = 1:numGenerations
     for i = 1:numTrajectories
         for a = 1:assists+1
             [pos1x, pos1y] = Planets(trajs(a)).pos(times(a));
-            [pos2x, pos2y] = Planets(trajs(a+1)).pos(times(a+1));
+            [pos1x, pos1y] = Planets(trajs(a+1)).pos(times(a+1));
             r1 = [pos1x pos1y 0];
-            r2 = [];
+            r2 = 
         end
     end
     %Calculate fitness of each interaction based on velocities
