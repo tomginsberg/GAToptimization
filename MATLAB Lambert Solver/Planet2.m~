@@ -12,11 +12,10 @@ classdef Planet2
         long_ascDot
         E
         planet_radius
-        mass
-        period
+        mass     
     end
     methods
-        function obj = Planet2(a,aDot,e,eDot,long,longDot,long_peri,long_periDot,long_asc,long_ascDot,planet_radius,mass,period)
+        function obj = Planet2(a,aDot,e,eDot,long,longDot,long_peri,long_periDot,long_asc,long_ascDot,planet_radius,mass)
             obj.a = a;
             obj.aDot = aDot;
             obj.e = e;
@@ -30,27 +29,12 @@ classdef Planet2
             obj.planet_radius = planet_radius;
             obj.mass = mass;
             obj.E = NaN;
-            obj.period = period;
         end
+        
+        function v
+        
         
         %Time 0 is at J2000. Enter time in days after
-        %Returns velocity in km/sec
-        function v = vel(obj, t, dt)
-            AU= 149597870;
-            [x1, y1] = obj.pos(t);
-            [x2, y2] = obj.pos(t+dt);
-            v = [(x2-x1)*AU/(dt * 3600 * 24) (y2-y1)*AU/(dt * 3600 * 24)];
-        end
-        
-        %Returns velocity in AU/day
-        function v = velAU(obj, t, dt)
-            [x1, y1] = obj.pos(t);
-            [x2, y2] = obj.pos(t+dt);
-            v = [(x2-x1)/dt (y2-y1)/dt];
-        end
-        
-        %Time 0 is at J2000. Enter time in days after
-        %Returns x and y position in sun frame in AU
         function [x, y] = pos(obj, t)
             time = t / (365*100);
             
@@ -86,6 +70,7 @@ classdef Planet2
             P = a * (cos(E) - e);
             Q = a * sin(E) * sqrt(1 - e^2);
 
+            %Rotate into 3d in sun's reference frame
             %Rotate by argument of periapsis
             x = cos(w) * P - sin(w) * Q;
             y = sin(w) * P + cos(w) * Q;
