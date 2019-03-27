@@ -1,7 +1,7 @@
 import numpy as np
 from poliastro.core.iod import izzo as izzo_fast
 import pykep as pk
-
+from Utils.to_mathematica import convert
 
 class Planet:
     # AU     AU   Years  Rads  GM (AU^3/Year^2)
@@ -44,6 +44,7 @@ trajectory = [(pos[i], pos[i + 1], times[i + 1] - times[i]) for i in range(items
 # Solve Lamberts problem with every element of solution
 def solve_trajectory():
     ivs = [pk.lambert_problem(*leg, Sun).get_v1()[0] for leg in trajectory]
+    print(convert(pos,times,ivs))
     print(trajectory)
     print('')
     print(ivs)
