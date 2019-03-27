@@ -12,11 +12,11 @@ class Planet:
         self.omega = 2 * np.pi / period
         self.size = size
         self.phi = phi
-
+        self.angular_vel = self.omega * self.orbit
     def get_pos(self, t):
         return np.array([self.orbit * np.cos(self.omega * t + self.phi), self.orbit * np.sin(self.omega * t + self.phi), 0])
-    def pos_func(self):
-        return lamba
+    def get_vel(self, t):
+        return np.array([-self.angular_vel * np.sin(self.omega * t + self.phi), self.angular_vel * np.cos(self.omega * t + self.phi), 0])
 
 
 # AU
