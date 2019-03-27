@@ -4,7 +4,6 @@ from poliastro.core.iod import izzo as izzo_fast
 
 class Planet:
     # AU     AU   Years  Rads  GM (AU^3/Year^2)
-
     def __init__(self, orbit, size, period, phi, attractor):
         self.orbit = orbit
         self.period = period
