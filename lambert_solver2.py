@@ -1,5 +1,6 @@
 import numpy as np
 from poliastro.core.iod import izzo as izzo_fast
+import pykep as pk
 
 
 class Planet:
@@ -14,6 +15,8 @@ class Planet:
 
     def get_pos(self, t):
         return np.array([self.orbit * np.cos(self.omega * t + self.phi), self.orbit * np.sin(self.omega * t + self.phi), 0])
+    def pos_func(self):
+        return lamba
 
 
 # AU
@@ -27,9 +30,20 @@ Sun = 39.42
 Earth = Planet(1, earth_radius, 1, 0, earth_attractor)
 Mercury = Planet(0.374496, earth_radius * 0.38, 0.241, np.pi / 2, 0.0552734 * earth_attractor)
 Mars = Planet(1.5458, earth_radius * 0.53, 1.8821, np.pi + .7, 0.107447 * earth_attractor)
-Venus = Planet(0.726088, earth_radius * 0.95, 0.6156, 3 * np.pi/4, 0.814996 * earth_attractor)
-Jupiter = Planet(5.328, earth_radius * 3, 11.87, np.pi / 4 + .38, 317.828 * earth_attractor)
+Venus = Planet(0.726088, earth_radius * 0.95, 0.6156, 3 * np.pi / 4, 0.814996 * earth_attractor)
+Jupiter = Planet(5.328, earth_radius * 3, 11.87, np.pi / 2 + 0.38, 317.828 * earth_attractor)
 
-lambert_sol = izzo_fast(Sun, Earth.get_pos(0), Earth.get_pos(1/4), 1/4, M=0, numiter=10, rtol=1e-2)
-for v0, v in lambert_sol:
-    print("V0: {}, Vf: {}".format(v0[:2], v[:2]))
+
+times = [0, .6, 1.7, 2.5, 4.2]
+planets = [Earth, Venus, Earth, Mars, Jupiter]
+items = len(times)  # should also equal length of planets
+pos = [planets[i].get_pos(times[i]) for i in range(items)]
+
+trajectory = [(pos[i], pos[i + 1], times[i + 1] - times[i]) for i in range(items - 1)]
+
+# Solve Lamberts problem with every element of solution
+def solve_trajectory():
+    ivs = [pk.lambert_problem(*leg, Sun).get_v1()[0] for leg in trajectory]
+    print(trajectory)
+    print('')
+    print(ivs)
