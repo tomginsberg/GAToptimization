@@ -49,10 +49,11 @@ def optimize():
     uda = pg.sade(gen=100)
     t0 = time.time()
     archi = pg.archipelago(algo=uda, prob=udp, n=8, pop_size=20)
-    archi.evolve(20)
+    archi.evolve(10)
     archi.wait()
     t1 = time.time()
     sols = archi.get_champions_f()
+    print("Scores:  " + str(sols) + "\n")
     idx = sols.index(min(sols))
     mission = udp.get_soln(archi.get_champions_x()[idx])
     [print(str(l) + "\n") for l in mission]

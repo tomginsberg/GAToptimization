@@ -20,7 +20,7 @@ class gprob:
         - times: a list of times when to arrive at each planet
         - trange: a 2 item list of launch window i.e [t_min, t_max]
         - enctr: the number of planets to visit not including initial planet, before going for final planet in seq
-            if zero goes directly to to last planet. must be less than or equal to #planets - 2
+                must be less than or equal to #planets - 2
         '''
         self.planets = planets
         self.times = times
