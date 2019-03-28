@@ -1,0 +1,5 @@
+function path = calculatePath(trajectory, times, planets, dt)
+    %Given the optimal list of planets to visit and 
+
+
+end

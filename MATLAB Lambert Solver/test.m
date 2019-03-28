@@ -27,9 +27,8 @@ for i = 1:n
     end
 end
 
-f = figure;
-f.set('visible','off')
-for i = 1:1000
+
+for i = 1:100
     plot(px, py, '--')
     hold on
     scatter(px(i,:), py(i,:), sz, 'r.');

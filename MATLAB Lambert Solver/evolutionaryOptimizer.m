@@ -117,3 +117,15 @@ for g = 1:numGenerations
         [trajs, times] = mutate(trajs, times);
     end
 end
+
+%Save the best trajectory after evolution
+[~, idx] = max(fitnessVal);
+trajectory = squeeze(trajs(idx,:,:));
+times = squeeze(times(idx,:,:));
+
+%Calculate vector representing ship's path by following best trajectory
+dt = 1; %in days
+path = calculatePath(trajectory, times, planets, dt);
+
+%Render/calculate output to give to other program for rendering
+render(path, planets, dt);
