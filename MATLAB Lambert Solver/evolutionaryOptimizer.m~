@@ -10,7 +10,7 @@ planets = [Mercury, Venus, Earth, Mars, Jupiter];
 %planets = initPlanets(); % More realistic planets...
 
 kstoauyear = 0.210805;
-muC = 1.327124e11; %Sun gravitational parameter in km^3/s^2
+sgp = 1.327124e11; %Sun gravitational parameter in km^3/s^2
 AU =  149597870; % astronomical unit in km
 %%
 %%Starting planet 
@@ -28,30 +28,42 @@ assists = randi(assistRange);
 
 %%Pick 100 random trajectories starting at startPlanet and ending at
 %%endPlanet
-trajs(2:assists+1,:) = randi(5,numTrajectories,assists);
-trajs(1,:) = startPlanet;
-trajs(assists+2,:) = endPlanet;
+trajs(:,2:assists+1) = randi(5,numTrajectories,assists);
+trajs(:,1) = startPlanet;
+trajs(:,assists+2) = endPlanet;
 
 %Time range
 timeRange = [10, 1000];
 
 %Pick 100 random transfer times
-times(2:assists+1,:) = randi(5,numTrajectories,assists+1) * 30;
-for i = 1:assits+1
-times(1,:) = 0;
+times(:,2:assists+2) = randi(5,numTrajectories,assists+1) * 30;
+times(:,1) = 0;
 
 %%Calculate fitness
 numGenerations = 1000;
 for g = 1:numGenerations
     %Calculate in/out velocities from planets based on Lambert solutions
+    vOut = zeros(numTrajectories,assists);
+    vIn = zeros(numTrajectories,assists);
+    
     for i = 1:numTrajectories
         for a = 1:assists+1
-            [pos1x, pos1y] = Planets(trajs(a)).pos(times(a));
-            [pos1x, pos1y] = Planets(trajs(a+1)).pos(times(a+1));
+            %Find current position of current planet
+            [pos1x, pos1y] = Planets(trajs(a)).pos(sum(times(1:a)));
+            
+            %Find position of destination planet at selected eta
+            [pos2x, pos2y] = Planets(trajs(a+1)).pos(sum(times(1:a+1)));
+            
+            %Set up 
             r1 = [pos1x pos1y 0];
-            r2 = 
+            r2 = [pos2x pos2y 0];
+            t = times(a);
+            numOrbits = 0; %Is this optimal??
+            
+            [vOut(i,a), vIn(i,a), ~] = lambert(r1, r2, t, numOrbits, sgp); 
         end
     end
+    
     %Calculate fitness of each interaction based on velocities
     %Find total fitness along entire trajectory
     %Kill bad trajectories
