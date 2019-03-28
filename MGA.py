@@ -40,7 +40,7 @@ def optimize():
     Venus = Planet(0.726088, earth_radius * 0.95, 0.6156, 3 * np.pi / 4, 0.814996 * earth_attractor)
     Jupiter = Planet(5.328, earth_radius * 3, 11.87, np.pi / 2 + 0.38, 317.828 * earth_attractor)
 
-    times = [0, .6, 1.7, 2.5, 5]
+    times = [0, .2, 0.3, 0.6, 5]
     planets = [Earth, Venus, Earth, Mars, Jupiter]
     enctrs = len(planets) - 5
 
@@ -48,17 +48,19 @@ def optimize():
     udp = gprob(planets, times, [0, 1], enctr=enctrs)
     uda = pg.sade(gen=100)
     t0 = time.time()
-    archi = pg.archipelago(algo=uda, prob=udp, n=8, pop_size=20)
+    archi = pg.archipelago(algo=uda, prob=udp, n=8, pop_size=100)
     archi.evolve(10)
     archi.wait()
     t1 = time.time()
     sols = archi.get_champions_f()
-    print("Scores:  " + str(sols) + "\n")
+    # print("Scores:  " + str(sols) + "\n")
     idx = sols.index(min(sols))
-    mission = udp.get_soln(archi.get_champions_x()[idx])
-    [print(str(l) + "\n") for l in mission]
+    mission = udp.pretty(archi.get_champions_x()[idx])
 
-    print("\nTime for soln: {} sec".format(t1 - t0))
+    # [print(str(l) + "\n") for l in mission]
+    convert(mission[0], mission[1], mission[2])
+
+    print("\n\nTime for soln: {} sec\n\n".format(t1 - t0))
 
 if __name__ == '__main__':
     optimize()

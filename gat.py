@@ -61,9 +61,15 @@ class gprob:
         x contains the decision vector, the times when we reach each planet, the initial velocities
         '''
         # 0. mission time and number of GAs
-        et, GAps, enctrs = np.cumsum(x[:len(self.times)]), x[len(self.times):-1], x[-1]  # [t0,t1,t2, ... ], [i0,i1,i2,...], [ectrs]
+        et, GAps, enctrs = np.array(x[:len(self.times)]), x[len(self.times):-1], x[-1]  # [t0,t1,t2, ... ], [i0,i1,i2,...], [ectrs]
         visits = int(enctrs) + 2
         GAps = np.array(GAps, dtype=int)[:visits - 2] // 10
+        ts = np.zeros_like(self.planets[:visits])
+        ts[0] = et[0]
+        ts[-1] = et[-1]
+        if(visits - 2 > 0):
+            ts[1:-1] = et[GAps]  # find the times that correspond to the times for each gravity assist
+        et = np.cumsum(ts)
 
         # 1. find the pos and velocities of the planets
         r = np.zeros_like(self.planets[:visits])
@@ -72,7 +78,7 @@ class gprob:
         r[0], v[0] = [self.planets[0].get_pos(et[0]), self.planets[0].get_vel(et[0])]  # find the position and velocity of start planet
         r[-1], v[-1] = [self.planets[-1].get_pos(et[-1]), self.planets[-1].get_vel(et[-1])]  # find the position and velocity of end planet
 
-        if(enctrs > 0):
+        if(visits - 2 > 0):
             choices = np.array(self.planets)[GAps]
             for i, plts in enumerate(choices):
                 r[i + 1], v[i + 1] = [plts.get_pos(et[i + 1]), plts.get_vel(et[i + 1])]
@@ -88,7 +94,7 @@ class gprob:
             return (vlam, v)
         return (vlam, v, r, et, GAps, enctrs)
 
-    def get_soln(self, x):
+    def get_soln(self, x, pretty=False):
         '''
         returns the solution trajectory, based on the decision vector x
         '''
@@ -103,4 +109,13 @@ class gprob:
         plnts.append(self.planets[-1])
 
         ivs = [vel[0] for vel in vlam]
-        return (r, et, ivs)  # return the position of all the planets at the arrival times including the start time as well as the initial velocities at each planet
+        if(not pretty):
+            return (r, et, ivs)  # return the position of all the planets at the arrival times including the start time as well as the initial velocities at each planet
+        return(r, et, ivs, len(plnts))
+
+    def pretty(self, x):
+        r, et, ivs, plnts = self.get_soln(x, pretty=True)
+        print("Start time: {} Years from now, arrive in {} Years".format(et[0], et[-1]))
+        print("We made {} gravity assists".format(plnts - 2))
+        print("\n\n")
+        return (r, et, ivs)
