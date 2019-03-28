@@ -18,4 +18,3 @@ def convert(pos, times, vels):
     print(timeStr[:-2]+close)
     print(velStr[:-2]+close)
 
-convert([[1,0,0],[1,0,0]],[0,1],[[0,6]])
