@@ -14,17 +14,17 @@ class gprob:
         the trajectory that minimizes our fitness function for velocity.
     '''
 
-    def __init__(self, planets, times, trange, mu=39.42, enctr=0):
+    def __init__(self, planets, tmins, tmaxs, mu=39.42, enctr=0):
         '''
         - planets: a list of the planets created by planet class in lambert_solver
-        - times: a list of times when to arrive at each planet
-        - trange: a 2 item list of launch window i.e [t_min, t_max]
+        - tmins: a list of times when to launch/arrive at each planet, this should be the minimum time
+        - tmaxs: a list of times when to launch/arrive at each planet, this should be the max time
         - enctr: the number of planets to visit not including initial planet, before going for final planet in seq
                 must be less than or equal to #planets - 2
         '''
         self.planets = planets
-        self.times = times
-        self.trange = trange
+        self.times = tmins
+        self.trange = tmaxs
         self.mu = mu
         self.seq_len = len(self.planets)
         self.min_enctr = enctr
@@ -33,9 +33,9 @@ class gprob:
         '''
         The bounds for the time
         '''  # the list of times plus the minimum departure time and minimum visits as well as the index of the choices multiplied by 10
-        lb = list(map(lambda x: x + self.trange[0], self.times)) + [10] * (self.seq_len - 2) + [self.min_enctr]
+        lb = list(map(lambda x: x, self.times)) + [10] * (self.seq_len - 2) + [self.min_enctr]
         # the list of times plus the maximum departure time and max visits as well as the index of the choices multiplied by 10
-        ub = list(map(lambda x: x + self.trange[1], self.times)) + [(self.seq_len - 2) * 10] * (self.seq_len - 2) + [self.seq_len - 2]
+        ub = list(map(lambda x: x, self.trange)) + [(self.seq_len - 2) * 10] * (self.seq_len - 2) + [self.seq_len - 2]
 
         return (lb, ub)  # needs to be of this form for pygmo
 

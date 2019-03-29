@@ -42,16 +42,16 @@ def optimize():
     Jupiter = Planet(5.328, earth_radius * 3, 11.87, np.pi / 2 + 0.38, 317.828 * earth_attractor)
     boi = Comet()
 
-    times = [0, .2, 0.3, 0.6, 5]
+    times = [0, .1, 0.2, 0.3, 0.4, 0.5, 0.6]
     planets = [Earth, Venus, Earth, Mars, Mercury, Jupiter, boi]
     enctrs = len(planets) - 5
 
     # optimize the problem
-    udp = gprob(planets, times, [0, 1], enctr=enctrs)
+    udp = gprob(planets, times, [1, 2, 3, 4, 5, 6, 7], enctr=enctrs)
     uda = pg.sade(gen=100)
     t0 = time.time()
     archi = pg.archipelago(algo=uda, prob=udp, n=8, pop_size=20)
-    archi.evolve(50)
+    archi.evolve(30)
     archi.wait()
     t1 = time.time()
     sols = archi.get_champions_f()
