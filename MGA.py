@@ -5,6 +5,7 @@ from Utils.to_mathematica import convert
 from gat import gprob
 import pygmo as pg
 import time
+from comet import Comet
 
 
 class Planet:
@@ -39,9 +40,10 @@ def optimize():
     Mars = Planet(1.5458, earth_radius * 0.53, 1.8821, np.pi + .7, 0.107447 * earth_attractor)
     Venus = Planet(0.726088, earth_radius * 0.95, 0.6156, 3 * np.pi / 4, 0.814996 * earth_attractor)
     Jupiter = Planet(5.328, earth_radius * 3, 11.87, np.pi / 2 + 0.38, 317.828 * earth_attractor)
+    Comet = Comet()
 
     times = [0, .2, 0.3, 0.6, 5]
-    planets = [Earth, Venus, Earth, Mars, Jupiter]
+    planets = [Earth, Venus, Earth, Mars, Mercury, Jupiter, Comet]
     enctrs = len(planets) - 5
 
     # optimize the problem
