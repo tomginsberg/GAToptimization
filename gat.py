@@ -53,7 +53,7 @@ class gprob:
         for i in range(len(vlam) - 1):
             dirVal += (dot(vlam[i][1] / norm(vlam[i][1]), v[i + 1] / norm(v[i + 1])) + dot(vlam[i + 1][0] / norm(vlam[i + 1][0]), v[i + 1] / norm(v[i + 1]))) / 2
             thrust += norm(vlam[i + 1][0] - v[i]) / norm(vlam[i][1] - v[i])
-
+	timeScore = np.sum(self.times) / 500 #is 500 ok?
         thrust = 1 - abs(1 - thrust)
         score = thrust + dirVal
 
