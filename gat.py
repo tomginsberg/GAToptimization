@@ -43,7 +43,7 @@ class gprob:
         '''
         compute the fitness
         '''
-        vlam, v = self.get_v(x)
+        vlam, v, total_time = self.get_v(x)
 
         dirVal = 0
         thrust = 0
@@ -53,9 +53,10 @@ class gprob:
         for i in range(len(vlam) - 1):
             dirVal += (dot(vlam[i][1] / norm(vlam[i][1]), v[i + 1] / norm(v[i + 1])) + dot(vlam[i + 1][0] / norm(vlam[i + 1][0]), v[i + 1] / norm(v[i + 1]))) / 2
             thrust += norm(vlam[i + 1][0] - v[i]) / norm(vlam[i][1] - v[i])
-	timeScore = np.sum(self.times) / 500 #is 500 ok?
+
+        timeScore = np.exp(-total_time)  # best time is if we had zero time -> 1
         thrust = 1 - abs(1 - thrust)
-        score = thrust + dirVal
+        score = thrust + dirVal + timeScore
 
         return (-1.0 * score, )  # needs to be of this form for pygmo
 
@@ -94,7 +95,7 @@ class gprob:
         # 3. calc fitness
         vlam = [[np.array(p.get_v1()[0]), np.array(p.get_v2()[0])] for p in paths]  # contains the initial and final velocities for each path. Every velocity is a triple (v_x,v_y,v_z)
         if(not soln):
-            return (vlam, v)
+            return (vlam, v, et[-1])
         return (vlam, v, r, et, GAps, enctrs)
 
     def get_soln(self, x, pretty=False):
