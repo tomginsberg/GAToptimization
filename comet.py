@@ -1,6 +1,5 @@
 from scipy.interpolate import interp1d
 import numpy as np
-import matplotlib.pyplot as plt
 
 x = np.array([2., 2.09074, 2.15889, 2.19662, 2.19294, 2.13267, 1.99608, 1.76133, \
 1.41377, 0.96056, 0.435381, -0.11853, -0.668145, -1.19566, -1.69404, \
@@ -97,3 +96,5 @@ yoft = interp1d(t, y)
 class Comet:
     def get_pos(self,t):
         return np.array([xoft(t%23.1),yoft(t%23.1),0])
+    def get_vel(self,t):
+        return np.array([0,0,0])
