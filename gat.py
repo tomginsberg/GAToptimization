@@ -47,6 +47,9 @@ class gprob:
 
         dirVal = 0
         thrust = 0
+        dirVal += dot(vlam[0][0] / norm(vlam[0][0]), v[0] / norm(v[0]))
+        thrust += norm((vlam[0][0] - v[0]) / v[0])
+
         for i in range(len(vlam) - 1):
             dirVal += (dot(vlam[i][1] / norm(vlam[i][1]), v[i + 1] / norm(v[i + 1])) + dot(vlam[i + 1][0] / norm(vlam[i + 1][0]), v[i + 1] / norm(v[i + 1]))) / 2
             thrust += norm(vlam[i + 1][0] - v[i]) / norm(vlam[i][1] - v[i])
