@@ -22,4 +22,3 @@ def convert(pos, times, vels):
         f.write(timeStr[:-2] + close + "\n")
         f.write(velStr[:-2] + close + "\n")
 
-convert([[1, 0], [0, 1]], [0, 2], [[1, 1]])
