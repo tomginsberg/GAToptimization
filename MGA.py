@@ -44,10 +44,10 @@ def optimize():
 
     times = [0, .1, 0.2, 0.3, 0.4, 0.5, 0.6]
     planets = [Earth, Venus, Earth, Mars, Mercury, Jupiter, boi]
-    enctrs = len(planets) - 5
+    enctrs = 0
 
     # optimize the problem
-    udp = gprob(planets, times, [1, 2, 3, 4, 5, 6, 7], enctr=enctrs)
+    udp = gprob(planets, times, [1, 2, 3, 4, 5, 6, 7])
     uda = pg.sade(gen=100)
     t0 = time.time()
     archi = pg.archipelago(algo=uda, prob=udp, n=8, pop_size=20)
