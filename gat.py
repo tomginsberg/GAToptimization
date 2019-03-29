@@ -56,7 +56,7 @@ class gprob:
 
         timeScore = np.exp(-total_time)  # best time is if we had zero time -> 1
         thrust = 1 - abs(1 - thrust)
-        score = thrust + dirVal + timeScore
+        score = thrust + 2 * dirVal + 10 * timeScore
 
         return (-1.0 * score, )  # needs to be of this form for pygmo
 
