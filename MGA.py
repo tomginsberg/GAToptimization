@@ -50,13 +50,13 @@ def optimize():
     udp = gprob(planets, times, [0, 1], enctr=enctrs)
     uda = pg.sade(gen=100)
     t0 = time.time()
-    archi = pg.archipelago(algo=uda, prob=udp, n=8, pop_size=100)
-    archi.evolve(10)
+    archi = pg.archipelago(algo=uda, prob=udp, n=8, pop_size=20)
+    archi.evolve(50)
     archi.wait()
     t1 = time.time()
     sols = archi.get_champions_f()
-    # print("Scores:  " + str(sols) + "\n")
     idx = sols.index(min(sols))
+    print("index: {}, Scores:  ".format(idx) + str(sols) + "\n\n")
     mission = udp.pretty(archi.get_champions_x()[idx])
 
     # [print(str(l) + "\n") for l in mission]

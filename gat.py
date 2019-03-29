@@ -48,7 +48,7 @@ class gprob:
         dirVal = 0
         thrust = 0
         dirVal += dot(vlam[0][0] / norm(vlam[0][0]), v[0] / norm(v[0]))
-        thrust += norm((vlam[0][0] - v[0]) / v[0])
+        thrust += norm((vlam[0][0] - v[0]) / norm(v[0]))
 
         for i in range(len(vlam) - 1):
             dirVal += (dot(vlam[i][1] / norm(vlam[i][1]), v[i + 1] / norm(v[i + 1])) + dot(vlam[i + 1][0] / norm(vlam[i + 1][0]), v[i + 1] / norm(v[i + 1]))) / 2
@@ -117,6 +117,11 @@ class gprob:
         return(r, et, ivs, len(plnts))
 
     def pretty(self, x):
+        '''
+        returns the solution trajectory, based on the decision vector x
+        but also just prints some extra info
+
+        '''
         r, et, ivs, plnts = self.get_soln(x, pretty=True)
         print("Start time: {} Years from now, arrive in {} Years".format(et[0], et[-1]))
         print("We made {} gravity assists".format(plnts - 2))
