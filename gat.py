@@ -40,7 +40,7 @@ class gprob:
         '''  # the list of times plus the minimum departure time and minimum visits as well as the index of the choices multiplied by 10
         lb = list(map(lambda x: x, self.times)) + [10] * (self.seq_len - 2) + [self.min_enctr]
         # the list of times plus the maximum departure time and max visits as well as the index of the choices multiplied by 10
-        ub = list(map(lambda x: x, self.trange)) + [(self.seq_len - 2) * 10] * (self.seq_len - 2) + [self.max_enctr]
+        ub = list(map(lambda x: x, self.trange)) + [(self.seq_len - 2) * 10] * (self.seq_len - 2) + [self.max_enctr * 10]
 
         return (lb, ub)  # needs to be of this form for pygmo
 
@@ -55,11 +55,11 @@ class gprob:
         vchange = 0
         x = dot(vlam[0][0] / norm(vlam[0][0]), v[0] / norm(v[0]))
         dirVal += x if (x > 0.5 and x < 0.99) else -10.0
-        thrust += norm((vlam[0][0] - v[0]) / norm(v[0]))
+        thrust += norm(vlam[0][0] - v[0]) / norm(v[0])
 
         for i in range(len(vlam) - 1):
             dv = dot(vlam[i][1] / norm(vlam[i][1]), vlam[i + 1][0] / norm(vlam[i + 1][0]))  # vin dot vout
-            vchange += dv if dv > 0.9 else -10
+            vchange += dv if (dv >= 0.97 and dv < 1) else -10.0
             dot_in = dot(vlam[i][1] / norm(vlam[i][1]), v[i + 1] / norm(v[i + 1]))  # vin dot vplanet
             dot_out = dot(vlam[i + 1][0] / norm(vlam[i + 1][0]), v[i + 1] / norm(v[i + 1]))  # vout dot vplanet
             assistDir = dot(vlam[i + 1][0] / norm(vlam[i + 1][0]), pos[i + 1] / norm(pos[i + 1]))  # vout dot orthogonal vector
@@ -81,7 +81,7 @@ class gprob:
         '''
         # 0. mission time and number of GAs
         et, GAps, enctrs = np.array(x[:len(self.times)]), x[len(self.times):-1], x[-1]  # [t0,t1,t2, ... ], [i0,i1,i2,...], [ectrs]
-        visits = int(enctrs) + 2
+        visits = int(enctrs) // 10 + 2
         GAps = np.array(GAps, dtype=int)[:visits - 2] // 10
         ts = np.zeros_like(self.planets[:visits])
         ts[0] = et[0]
@@ -143,3 +143,6 @@ class gprob:
         print("We made {} gravity assists".format(plnts - 2))
         print("\n\n")
         return (r, et, ivs)
+
+    def get_name(self):
+        return "Multi Gravitational Assist Problem"
