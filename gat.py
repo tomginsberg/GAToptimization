@@ -14,13 +14,15 @@ class gprob:
         the trajectory that minimizes our fitness function for velocity.
     '''
 
-    def __init__(self, planets, tmins, tmaxs, mu=39.42, enctr=0):
+    def __init__(self, planets, tmins, tmaxs, mu=39.42, enctr=0, max_enctr=0):
         '''
         - planets: a list of the planets created by planet class in lambert_solver
         - tmins: a list of times when to launch/arrive at each planet, this should be the minimum time
         - tmaxs: a list of times when to launch/arrive at each planet, this should be the max time
         - enctr: the number of planets to visit not including initial planet, before going for final planet in seq
                 must be less than or equal to #planets - 2
+        - max_enctr: the max number of gravity assists, should be less than or equal to the number of planets
+        not including the initial and last
         '''
         self.planets = planets
         self.times = tmins
@@ -28,6 +30,9 @@ class gprob:
         self.mu = mu
         self.seq_len = len(self.planets)
         self.min_enctr = enctr
+        self.max_enctr = max_enctr
+
+        assert(self.max_enctr >= self.min_enctr)
 
     def get_bounds(self):
         '''
@@ -35,7 +40,7 @@ class gprob:
         '''  # the list of times plus the minimum departure time and minimum visits as well as the index of the choices multiplied by 10
         lb = list(map(lambda x: x, self.times)) + [10] * (self.seq_len - 2) + [self.min_enctr]
         # the list of times plus the maximum departure time and max visits as well as the index of the choices multiplied by 10
-        ub = list(map(lambda x: x, self.trange)) + [(self.seq_len - 2) * 10] * (self.seq_len - 2) + [self.seq_len - 2]
+        ub = list(map(lambda x: x, self.trange)) + [(self.seq_len - 2) * 10] * (self.seq_len - 2) + [self.max_enctr]
 
         return (lb, ub)  # needs to be of this form for pygmo
 
@@ -43,20 +48,30 @@ class gprob:
         '''
         compute the fitness
         '''
-        vlam, v, total_time = self.get_v(x)
+        vlam, v, total_time, pos = self.get_v(x)
 
         dirVal = 0
         thrust = 0
-        dirVal += dot(vlam[0][0] / norm(vlam[0][0]), v[0] / norm(v[0]))
+        vchange = 0
+        x = dot(vlam[0][0] / norm(vlam[0][0]), v[0] / norm(v[0]))
+        dirVal += x if (x > 0.5 and x < 0.99) else -10.0
         thrust += norm((vlam[0][0] - v[0]) / norm(v[0]))
 
         for i in range(len(vlam) - 1):
-            dirVal += (dot(vlam[i][1] / norm(vlam[i][1]), v[i + 1] / norm(v[i + 1])) + dot(vlam[i + 1][0] / norm(vlam[i + 1][0]), v[i + 1] / norm(v[i + 1]))) / 2
+            dv = dot(vlam[i][1] / norm(vlam[i][1]), vlam[i + 1][0] / norm(vlam[i + 1][0]))  # vin dot vout
+            vchange += dv if dv > 0.9 else -10
+            dot_in = dot(vlam[i][1] / norm(vlam[i][1]), v[i + 1] / norm(v[i + 1]))  # vin dot vplanet
+            dot_out = dot(vlam[i + 1][0] / norm(vlam[i + 1][0]), v[i + 1] / norm(v[i + 1]))  # vout dot vplanet
+            assistDir = dot(vlam[i + 1][0] / norm(vlam[i + 1][0]), pos[i + 1] / norm(pos[i + 1]))  # vout dot orthogonal vector
+            dot_in = dot_in if (dot_in > 0.5 and dot_in < 0.99) else -10.0
+            dot_out = dot_out if (dot_out > 0.8 and dot_out < 0.99 and assistDir < 0) else -10.0
+            dirVal += (dot_in + dot_out) / 2
+
             thrust += norm(vlam[i + 1][0] - v[i]) / norm(vlam[i][1] - v[i])
 
         timeScore = np.exp(-total_time)  # best time is if we had zero time -> 1
-        thrust = 1 - abs(1 - thrust)
-        score = thrust + 2 * dirVal + 10 * timeScore
+        thrust = -1 * abs(1 - thrust)
+        score = thrust + dirVal + timeScore + vchange
 
         return (-1.0 * score, )  # needs to be of this form for pygmo
 
@@ -95,7 +110,7 @@ class gprob:
         # 3. calc fitness
         vlam = [[np.array(p.get_v1()[0]), np.array(p.get_v2()[0])] for p in paths]  # contains the initial and final velocities for each path. Every velocity is a triple (v_x,v_y,v_z)
         if(not soln):
-            return (vlam, v, et[-1])
+            return (vlam, v, et[-1], r)
         return (vlam, v, r, et, GAps, enctrs)
 
     def get_soln(self, x, pretty=False):
