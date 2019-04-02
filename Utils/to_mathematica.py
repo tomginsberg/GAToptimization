@@ -1,6 +1,6 @@
 
 def convert(pos, times, vels):
-    opn = "= <|"
+    opn = "<|"
     close = "|>"
     posStr = opn
     timeStr = opn
