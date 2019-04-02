@@ -8,12 +8,11 @@ class Planet:
         self.orbit = orbit
         self.period = period
         self.omega = 2 * np.pi / period
-        self.size = size
         self.phi = phi
 
     def get_pos(self, t):
         return np.array([self.orbit * np.cos(self.omega * t + self.phi), self.orbit * np.sin(self.omega * t + self.phi), 0])
-        
+
 
 # AU
 earth_radius = 0.00004258756

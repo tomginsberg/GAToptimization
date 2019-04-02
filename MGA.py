@@ -8,24 +8,7 @@ import time
 from comet import Comet
 import Utils.logger as logger
 import matplotlib.pyplot as plt
-
-
-class Planet:
-    # AU     AU   Years  Rads  GM (AU^3/Year^2)
-
-    def __init__(self, orbit, size, period, phi, attractor):
-        self.orbit = orbit
-        self.period = period
-        self.omega = 2 * np.pi / period
-        self.size = size
-        self.phi = phi
-        self.angular_vel = self.omega * self.orbit
-
-    def get_pos(self, t):
-        return np.array([self.orbit * np.cos(self.omega * t + self.phi), self.orbit * np.sin(self.omega * t + self.phi), 0])
-
-    def get_vel(self, t):
-        return np.array([-self.angular_vel * np.sin(self.omega * t + self.phi), self.angular_vel * np.cos(self.omega * t + self.phi), 0])
+from astro_objects import *
 
 
 def optimize(log_output=False):
@@ -37,17 +20,9 @@ def optimize(log_output=False):
     num_evolutions = 1000
     pop_size = 1000
 
-    # The sun only has one parameter of interest, it's attractor
-    Sun = 39.42
-
-    Earth = Planet(1, earth_radius, 1, 0, earth_attractor)
-    Mercury = Planet(0.374496, earth_radius * 0.38, 0.241, np.pi / 2, 0.0552734 * earth_attractor)
-    Mars = Planet(1.5458, earth_radius * 0.53, 1.8821, np.pi + .7, 0.107447 * earth_attractor)
-    Venus = Planet(0.726088, earth_radius * 0.95, 0.6156, 3 * np.pi / 4, 0.814996 * earth_attractor)
-    Jupiter = Planet(5.328, earth_radius * 3, 11.87, np.pi / 2 + 0.38, 317.828 * earth_attractor)
     cometX = Comet()
 
-    planets = [Earth, Earth, Venus, Mercury, Mars, Jupiter, cometX]
+    planets = [Earth, Earth, Venus, Mercury, Mars, Jupiter, Saturn, Neptune, Uranus, cometX]
     max_enctrs = len(planets) - 2
     times = [0] + [0.1] * (max_enctrs + 1)
     max_times = [5] * (max_enctrs + 2)
