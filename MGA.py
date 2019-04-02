@@ -6,15 +6,19 @@ from gat import gprob
 import pygmo as pg
 import time
 from comet import Comet
-import pandas as pd
+import Utils.logger as logger
 import matplotlib.pyplot as plt
 from astro_objects import *
 
+
 def optimize(log_output=False):
-    
-    num_gens = 100
-    num_evolutions = 10
-    pop_size = 50
+    # AU
+    earth_radius = 0.00004258756
+    # AU^3/year^2
+    earth_attractor = 0.0001184
+    num_gens = 1
+    num_evolutions = 1000
+    pop_size = 1000
 
     cometX = Comet()
 
@@ -37,7 +41,9 @@ def optimize(log_output=False):
         for i in range(num_evolutions):
             archi.evolve()
             archi.wait()
-            islands.append(np.array(archi.get_champions_f()))  # get the best scores from each island after each stage
+            avgFit = [-1.0 * np.average(island.get_population().get_f()) for island in archi]
+            islands.append(np.array(avgFit))
+            # islands.append(np.array(archi.get_champions_f()))  # get the best scores from each island after each stage
 
         showlog(np.array(islands), 8, num_evolutions)
     t1 = time.time()
@@ -55,13 +61,13 @@ def optimize(log_output=False):
 def showlog(fitness_data, num_islands, num_evolutions):
     island_fits = fitness_data.reshape(num_islands, num_evolutions)  # extracts all the best fits at each log output
     plt.grid(True)
-    plt.title("Best Fitness as a Function of Evolution Stage: Jupiter")
+    plt.title("Best Fitness as a Function of Evolution Stage: Comet")
     plt.xlabel("Stage")
     plt.ylabel("Fitness")
     for i, island in enumerate(island_fits):
-        plt.plot(-1 * island, label="Island {}".format(i))
+        plt.plot(island, label="Island {}".format(i))
     plt.legend(loc=0)
     plt.show()
 
 if __name__ == '__main__':
-    optimize()
+    optimize(True)
