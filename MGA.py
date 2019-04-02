@@ -34,7 +34,7 @@ def optimize(log_output=False):
     # AU^3/year^2
     earth_attractor = 0.0001184
     num_gens = 100
-    num_evolutions = 100
+    num_evolutions = 10
     pop_size = 50
 
     # The sun only has one parameter of interest, it's attractor
@@ -45,16 +45,16 @@ def optimize(log_output=False):
     Mars = Planet(1.5458, earth_radius * 0.53, 1.8821, np.pi + .7, 0.107447 * earth_attractor)
     Venus = Planet(0.726088, earth_radius * 0.95, 0.6156, 3 * np.pi / 4, 0.814996 * earth_attractor)
     Jupiter = Planet(5.328, earth_radius * 3, 11.87, np.pi / 2 + 0.38, 317.828 * earth_attractor)
-    boi = Comet()
+    cometX = Comet()
 
-    planets = [Earth, Venus, Earth, Mars, Mercury, Jupiter]
-    times = [0] + [0.1] * (len(planets) - 1)
-    max_times = [1] + [5] * (len(planets) - 1)
+    planets = [Earth, Earth, Venus, Mercury, Mars, Jupiter, cometX]
     max_enctrs = len(planets) - 2
+    times = [0] + [0.1] * (max_enctrs + 1)
+    max_times = [5] * (max_enctrs + 2)
 
     # optimize
     udp = gprob(planets, times, max_times, max_enctr=max_enctrs)
-    uda = pg.algorithm(pg.sade(gen=num_gens))
+    uda = pg.algorithm(pg.sade(gen=num_gens, memory=True))
     t0 = time.time()
     if(not log_output):  # this avoids the persistent looping to get the fitness data
         archi = pg.archipelago(algo=uda, prob=udp, n=8, pop_size=pop_size)
@@ -93,4 +93,4 @@ def showlog(fitness_data, num_islands, num_evolutions):
     plt.show()
 
 if __name__ == '__main__':
-    optimize(False)
+    optimize()
