@@ -1,10 +1,10 @@
 
 def convert(pos, times, vels):
     opn = "= <|"
-    close = "|>;"
-    posStr = "pos " + opn
-    timeStr = "times " + opn
-    velStr = "vels " + opn
+    close = "|>"
+    posStr = opn
+    timeStr = opn
+    velStr = opn
 
     for i in range(len(vels)):
         leg = pos[i]
