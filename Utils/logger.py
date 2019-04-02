@@ -1,4 +1,5 @@
-import csv 
+import csv
+import numpy as np 
 
 def log(t0, tf, phis):
     """
@@ -14,3 +15,7 @@ def log(t0, tf, phis):
         csvWriter = csv.writer(my_csv,delimiter=',')
         csvWriter.writerows(a)
 
+def test():
+        log(0.808396, 12.0695,[np.pi/2,3*np.pi/4,0,np.pi+.7,np.pi/2 + .38,0,0,0])
+
+test()

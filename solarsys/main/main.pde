@@ -7,14 +7,13 @@ PeasyCam cam;
 int numPlanets = 8;
 float earthRadius = 3;
 float earthDist = 60;
-float earthPeriod = 300;
-
+float earthPeriod = 200;
 
 PImage sunTexture;
 PImage[] textures = new PImage[numPlanets];
 
-float startTime = 0.808396;
-float endTime = 12.0695;
+float startTime; 
+float endTime;
 
 float time;
 float totalTime;
@@ -51,20 +50,20 @@ void setup() {
   textures[6] = loadImage("uranus.jpg");
   textures[7] = loadImage("neptune.jpg");
   
-  //endTime = endTime - time;
   
-  //logData = loadTable("data.csv", "header");
-  
+  logData = loadTable("log.csv", "header");
+  startTime = logData.getFloat(0,0);
+  endTime = logData.getFloat(0,1);
   
   for(int i = 0; i < numPlanets; i++){
-    phases[i] += wp[i] * time * earthPeriod - PI/2;
+    phases[i] += wp[i] * startTime * earthPeriod - PI/2 + logData.getFloat(1, i);
   }
   
   cam = new PeasyCam(this,500);
   cam.rotateX(PI / 2);
   cam.setWheelScale(.01);
   
-  sun = new Planet(5 * earthRadius, 0, 0, sunTexture, new PVector(0,0,0), 0);
+  sun = new Planet(4 * earthRadius, 0, 0, sunTexture, new PVector(0,0,0), 0);
   galaxy = new Planet(4000, 0, 0, loadImage("galaxy.png"), new PVector(0,0,0), 0);
   sun.spawnMoons();
   
@@ -82,7 +81,7 @@ void setup() {
 void draw() {
   frameRate(30);
   
-  //translate( -earthDist * (solX[floor(solL * (time % endTime)/endTime)]  + dxT), 0, -earthDist * (solY[floor(solL * (time % endTime)/endTime)] + dyT));
+  translate( -earthDist * (table.getFloat(trajIndex,1) + dxT), 0, -earthDist * (table.getFloat(trajIndex,0) + dyT));
   
   background(0);
   ambientLight(255,255,255);
@@ -109,32 +108,36 @@ void draw() {
     curveVertex(earthDist*cometX[0], earthDist*cometY[0]); 
   endShape();
   
-  cometIndexF = points * (time % cometPeriod)/cometPeriod;
-  cometIndex = floor(cometIndexF);
-  dxCom = (cometX[(cometIndex + 1) % points] - cometX[cometIndex])*(cometIndexF - cometIndex);
-  dyCom = (cometY[(cometIndex + 1) % points] - cometY[cometIndex])*(cometIndexF - cometIndex);
+  if (trajIndex < solL -2){
+    
+    cometIndexF = points * (time % cometPeriod)/cometPeriod;
+    cometIndex = floor(cometIndexF);
+    dxCom = (cometX[(cometIndex + 1) % points] - cometX[cometIndex])*(cometIndexF - cometIndex);
+    dyCom = (cometY[(cometIndex + 1) % points] - cometY[cometIndex])*(cometIndexF - cometIndex);
+    
+    stroke(244, 161, 66);
+    trajIndexF = solL * (time-startTime)/(totalTime);
+    trajIndex = floor(trajIndexF);
+    
+    dxT = (table.getFloat(trajIndex + 1,1) - table.getFloat(trajIndex,1))*(trajIndexF - trajIndex);
+    dyT = (table.getFloat(trajIndex + 1,0) - table.getFloat(trajIndex,0))*(trajIndexF - trajIndex);
+    sun.orbit(1);
+  }
   shape(comet, earthDist * (cometX[cometIndex] + dxCom), earthDist * (cometY[cometIndex] + dyCom));
-  
-  stroke(244, 161, 66);
-  trajIndexF = solL * (time-startTime)/(totalTime);
-  trajIndex = floor(trajIndexF);
   
   beginShape();
     curveVertex(earthDist * table.getFloat(0,1), earthDist * table.getFloat(0,0)); 
     for (int i = 0; i < trajIndex ; i++){
       curveVertex(earthDist * table.getFloat(i,1),earthDist * table.getFloat(i,0)); 
     }
-    if (trajIndex < solL - 1){
-      dxT = (table.getFloat(trajIndex + 1,1) - table.getFloat(trajIndex,1))*(trajIndexF - trajIndex);
-      dyT = (table.getFloat(trajIndex + 1,0) - table.getFloat(trajIndex,0))*(trajIndexF - trajIndex);
+    
+      
       
       curveVertex(earthDist * (table.getFloat(trajIndex,1) + dxT), earthDist * (table.getFloat(trajIndex,0) + dyT));
       curveVertex(earthDist * (table.getFloat(trajIndex,1) + dxT), earthDist * (table.getFloat(trajIndex,0) + dyT));
-    }else{
-      noLoop();
-    }
+    
   endShape();
   
-  sun.orbit(1);
+  
   time = time + 1/earthPeriod;
 }

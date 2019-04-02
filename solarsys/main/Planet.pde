@@ -1,7 +1,3 @@
-// Daniel Shiffman
-// http://codingtra.in
-// http://patreon.com/codingtrain
-// Code for: https://youtu.be/FGAwi7wpU8c
 class Planet {
   float radius;
   float distance;
