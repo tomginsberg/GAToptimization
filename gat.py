@@ -1,7 +1,6 @@
 import numpy as np
 from numpy.linalg import norm
 from numpy import dot
-import lambert_solver_fast
 import pykep as pk
 
 
