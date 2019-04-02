@@ -10,7 +10,7 @@ def log(t0, tf, phis):
     #and your good
     """
     a = [["Log Data"],[t0,tf], phis]
-    with open("new_file.csv","w+") as my_csv:
+    with open("../solarsys/main/data/log.csv","w+") as my_csv:
         csvWriter = csv.writer(my_csv,delimiter=',')
         csvWriter.writerows(a)
 

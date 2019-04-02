@@ -2,7 +2,6 @@
 // http://codingtra.in
 // http://patreon.com/codingtrain
 // Code for: https://youtu.be/FGAwi7wpU8c
-
 class Planet {
   float radius;
   float distance;
@@ -41,7 +40,7 @@ class Planet {
     planets = new Planet[numPlanets];
     
     for (int i = 0; i < numPlanets; i++) {
-      planets[i] = new Planet(rp[i], dp[i], wp[i], textures[i], new PVector(1,0,0),0);
+      planets[i] = new Planet(rp[i], dp[i], wp[i], textures[i], new PVector(1,0,0), phases[i]);
       
     }
   }
