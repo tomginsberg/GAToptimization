@@ -71,9 +71,9 @@ class gprob:
 
             thrust += norm(vlam[i + 1][0] - v[i]) / norm(vlam[i][1] - v[i])
 
-        # timeScore = np.exp(-total_time)  # best time is if we had zero time -> 1
+        timeScore = np.exp(-total_time)  # best time is if we had zero time -> 1
         thrust = -1 * abs(1 - thrust)
-        score = thrust + dirVal + vchange
+        score = thrust + dirVal + vchange + timeScore
 
         return (-1.0 * score, )  # needs to be of this form for pygmo
 
