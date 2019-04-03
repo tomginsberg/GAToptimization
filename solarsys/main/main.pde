@@ -2,6 +2,14 @@ import peasy.*;
 import interfascia.*;
 import java.io.*;
 
+//Interesting parameters
+String fullPath = "Documents/GAToptimization/";
+int numPlanets = 8;
+float earthRadius = 3;
+float earthDist = 60;
+float earthPeriod = 150;
+
+//Non-Interesting parameters (Do not touch)
 GUIController c;
 IFButton[] buttons = new IFButton[8];
 String dest = "Comet";
@@ -13,11 +21,6 @@ int programState = 0;
 Planet sun;
 Planet galaxy;
 PeasyCam cam;
-
-int numPlanets = 8;
-float earthRadius = 3;
-float earthDist = 60;
-float earthPeriod = 150;
 
 PImage sunTexture;
 PImage[] textures = new PImage[numPlanets];
@@ -109,7 +112,7 @@ void draw() {
     try {
         
         
-        Process p = Runtime.getRuntime().exec("python Documents/GAToptimization/get_trajectory.py " + dest);
+        Process p = Runtime.getRuntime().exec("python "+fullPath+"get_trajectory.py " + dest);
         
         BufferedReader stdInput = new BufferedReader(new 
              InputStreamReader(p.getInputStream()));
