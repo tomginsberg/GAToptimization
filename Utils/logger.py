@@ -18,4 +18,3 @@ def log(t0, tf, phis):
 def test():
         log(0.808396, 12.0695,[np.pi/2,3*np.pi/4,0,np.pi+.7,np.pi/2 + .38,0,0,0])
 
-test()

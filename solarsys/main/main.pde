@@ -1,4 +1,15 @@
 import peasy.*;
+import interfascia.*;
+
+GUIController c;
+IFButton[] buttons = new IFButton[9];
+String dest = "Comet";
+String[] planets = {"Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Comet"};
+PImage pic;
+PShader nebula;
+PFont cmu;
+
+int programState = 0;
 
 Planet sun;
 Planet galaxy;
@@ -59,9 +70,9 @@ void setup() {
     phases[i] += wp[i] * startTime * earthPeriod - PI/2 + logData.getFloat(1, i);
   }
   
-  cam = new PeasyCam(this,500);
-  cam.rotateX(PI / 2);
-  cam.setWheelScale(.01);
+  //cam = new PeasyCam(this,500);
+  //cam.rotateX(PI / 2);
+  //cam.setWheelScale(.01);
   
   sun = new Planet(4 * earthRadius, 0, 0, sunTexture, new PVector(0,0,0), 0);
   galaxy = new Planet(4000, 0, 0, loadImage("galaxy.png"), new PVector(0,0,0), 0);
@@ -76,11 +87,38 @@ void setup() {
   time = startTime;
   totalTime = endTime-startTime;
   
+  noStroke();
+  c = new GUIController (this);
+  
+  nebula = loadShader("nebula.glsl");
+  nebula.set("resolution", float(width), float(height));
+  int bWidth = 80;
+  int bHeight = 30;
+  int xB = 20;
+  int yB = 90;
+
+  for(int i = 0; i < planets.length; i++){
+      buttons[i] = new IFButton (planets[i], xB+(bWidth+10)*i, yB, bWidth, bHeight);
+      buttons[i].addActionListener(this);
+      c.add(buttons[i]);
+  }
+  cmu = loadFont("CMUSerif-Bold-48.vlw");
 }
 
 void draw() {
-  frameRate(30);
-  
+  if(programState == 0){
+    nebula.set("time", millis() / 500.0);  
+    shader(nebula); 
+    rect(0, 0, width, height);
+    resetShader();
+    textFont(cmu);
+    textSize(36);
+    text("MGA Trajectory Optimizer: Choose a Destination",20,50);
+    textSize(16);
+    text("By David Black, Tom Ginsberg, Bereket Guta, Calum Macdonald, and Jeremy Wong",20,70);
+    textSize(26);
+    text("Selected "+dest+". Press Enter to Generate Trajectory", 20, 150);
+  }else if(programState == 2){  
   translate( -earthDist * (table.getFloat(trajIndex,1) + dxT), 0, -earthDist * (table.getFloat(trajIndex,0) + dyT));
   
   background(0);
@@ -140,4 +178,13 @@ void draw() {
   
   
   time = time + 1/earthPeriod;
+  }
+}
+
+void actionPerformed (GUIEvent e) {
+  for(int i = 0; i < planets.length; i++){
+    if (e.getSource() == buttons[i]) {
+        dest = planets[i];
+    }
+  }
 }
