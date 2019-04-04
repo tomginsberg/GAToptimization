@@ -1,5 +1,5 @@
 Clear;
-file = Import["~/Documents/GAToptimization/trajectory_data.txt", 
+file = Import["..\\Desktop\\galaxy\\GAToptimization\\trajectory_data.txt", 
    "List"];
 solveKepler[x0_, y0_, vx0_, vy0_, t0_, tf_] := 
   Module[{\[Gamma] = 
@@ -16,7 +16,7 @@ solution =
   Table[solveKepler[pos[i][[1]], pos[i][[2]], vels[i][[1]], 
      vels[i][[2]], times[i], times[i + 1]], {i, 1, Length[pos]}] // 
    Piecewise;
-Export["~/Documents/GAToptimization/solarsys/main/data/data.csv", 
+Export["..\\Desktop\\galaxy\\GAToptimization\\solarsys\\main\\data\\data.csv", 
   Prepend[Table[
     solution, {t, times[1], times[Length[times]], 0.01}], {y, x}], 
   "CSV"];

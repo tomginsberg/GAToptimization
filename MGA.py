@@ -30,7 +30,7 @@ def optimize(log_output=False, dest='Mars'):
 
     num_gens = 1
     num_evolutions = 75
-    pop_size = 200
+    pop_size = 30
     cometX = Comet()
     if dest == "Comet":
         planets = [Earth, Earth, Mercury, Mars, Venus, Jupiter, Saturn, Neptune, Uranus, cometX]
@@ -39,10 +39,13 @@ def optimize(log_output=False, dest='Mars'):
         destination = [x for x in choices if x.get_name() == dest]
         choices.remove(destination[0])
         planets = choices + [destination[0]]
-    if dest == "Venus" or dest == "Mercury":
+    if dest == "Venus" or dest == "Mercury" or dest == "Mars":
         max_enctrs = 1
     else:
         max_enctrs = len(planets) - 2
+        num_gens = 100
+        num_evolutions = 2
+        pop_size = 20
     times = [0] + [0.1] * (max_enctrs + 1)
     max_times = [5] * (max_enctrs + 2)
 
@@ -64,24 +67,24 @@ def optimize(log_output=False, dest='Mars'):
             islands.append(np.array(avgFit))
             # islands.append(np.array(archi.get_champions_f()))  # get the best scores from each island after each stage
 
-        showlog(np.array(islands), 8, num_evolutions)
+        showlog(np.array(islands), 8, num_evolutions, dest)
     t1 = time.time()
     sols = archi.get_champions_f()
     idx = sols.index(min(sols))
-    # print("index: {}, Scores:  ".format(idx) + str(sols) + "\n\n")
+    print("index: {}, Scores:  ".format(idx) + str(sols) + "\n\n")
     mission = udp.pretty(archi.get_champions_x()[idx])
 
     # [print(str(l) + "\n") for l in mission]
     convert(mission[0], mission[1], mission[2])
     logger.log(mission[1][0], mission[1][-1], phi)
 
-    print("\n\nTime for soln: {} sec\n\n".format(t1 - t0))
+    print("\nTime for soln: {} sec\n\n".format(t1 - t0))
 
 
-def showlog(fitness_data, num_islands, num_evolutions):
+def showlog(fitness_data, num_islands, num_evolutions, dest):
     island_fits = fitness_data.reshape(num_evolutions, num_islands)  # extracts all the best fits at each log output
     plt.grid(True)
-    plt.title("Average Fitness as a Function of Generation: Comet")
+    plt.title("Average Fitness as a Function of Generation: {}".format(dest))
     plt.xlabel("Generation Number")
     plt.ylabel("Fitness")
     for i in range(num_islands):
@@ -91,7 +94,7 @@ def showlog(fitness_data, num_islands, num_evolutions):
 
 if __name__ == '__main__':
     print("Generating Trajectory to {}".format(sys.argv[1]))
-    optimize(dest=sys.argv[1])
+    optimize(False, dest=sys.argv[1])
     #..\\Desktop\\galaxy\\GAToptimization\\
     subprocess.call("math -run < ..\\Desktop\\galaxy\\GAToptimization\\integrator.m", shell=True)
     print("Done")

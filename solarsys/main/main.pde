@@ -3,7 +3,7 @@ import interfascia.*;
 import java.io.*;
 
 //Interesting parameters
-String fullPath = "Documents/GAToptimization/";
+String fullPath = "..\\Desktop\\galaxy\\GAToptimization\\";
 int numPlanets = 8;
 float earthRadius = 3;
 float earthDist = 60;
@@ -53,6 +53,7 @@ float[] phases = {0,0,0,0,0,0,0,0};
 
 void setup() {
   fullScreen(P3D);
+  //pixelDensity(2);
   sunTexture = loadImage("sun.jpg");
   textures[0] = loadImage("mercury.jpg");
   textures[1] = loadImage("venus.jpg");
@@ -64,9 +65,10 @@ void setup() {
   textures[7] = loadImage("neptune.jpg");
   
   c = new GUIController (this);
-  
-  nebula = loadShader("nebula.glsl");
+
+  nebula = loadShader("nebula2.glsl");
   nebula.set("resolution", float(width), float(height));
+
   
   int bWidth = 80;
   int bHeight = 30;
@@ -91,6 +93,7 @@ void draw() {
     fill(255);
     textFont(cmu);
     textSize(36);
+    text("fps: " + round(frameRate), 1000, 50);
     text("MGA Trajectory Optimizer: Choose a Destination",20,50);
     textSize(16);
     text("By David Black, Tom Ginsberg, Bereket Guta, Calum Macdonald, and Jeremy Wong",20,70);
@@ -100,19 +103,13 @@ void draw() {
   }else if(programState == 1){  
     textSize(26);
     text("Please wait while we evolve towards the optimal trajectory...", 20, 180);
-    cam = new PeasyCam(this,500);
-    cam.rotateX(PI / 2);
-    cam.setWheelScale(.01);
     programState = 2;
-    for(IFButton b : buttons){
-      c.remove(b);
-    }
+    
   }else if (programState == 2){
     String s = null;
     try {
         
-        
-        Process p = Runtime.getRuntime().exec("python "+fullPath+"get_trajectory.py " + dest);
+        Process p = Runtime.getRuntime().exec("python "+fullPath+"MGA.py " + dest);
         
         BufferedReader stdInput = new BufferedReader(new 
              InputStreamReader(p.getInputStream()));
@@ -140,13 +137,20 @@ void draw() {
     }
     programState = 3;
   }else if(programState ==3){
-    logData = loadTable("log_sample.csv", "header");
-    startTime = logData.getFloat(0,0);
-    endTime = logData.getFloat(0,1);
-    
-    for(int i = 0; i < numPlanets; i++){
-      phases[i] += wp[i] * startTime * earthPeriod - PI/2 + logData.getFloat(1, i);
+    for(IFButton b : buttons){
+      c.remove(b);
     }
+    cam = new PeasyCam(this,500);
+    cam.rotateX(PI / 2);
+    cam.setWheelScale(1);
+
+    logData = loadTable("log.csv", "header");
+    startTime = logData.getFloat(1,0);
+    endTime = logData.getFloat(1,1);
+    for(int i = 0; i < numPlanets; i++){
+      phases[i] += wp[i] * startTime * earthPeriod - PI/2 + logData.getFloat(3, i);
+    }
+
     
     sun = new Planet(4 * earthRadius, 0, 0, sunTexture, new PVector(0,0,0), 0);
     galaxy = new Planet(4000, 0, 0, loadImage("galaxy.png"), new PVector(0,0,0), 0);
@@ -155,16 +159,16 @@ void draw() {
     comet = createShape(SPHERE, earthRadius);
     comet.setTexture(loadImage("comet.jpg"));
     points = cometX.length;
-    table = loadTable("data_sample.csv", "header");
+    table = loadTable("data.csv", "header");
     solL = table.getRowCount();
-    
     time = startTime;
     totalTime = endTime-startTime;
     programState = 4;
+
     
   }else if(programState == 4){
     if (time < startTime + 2/earthPeriod){
-      delay(1000);
+     delay(1000);
     }else{ frameRate(30);}
     translate( -earthDist * (table.getFloat(trajIndex,1) + dxT), 0, -earthDist * (table.getFloat(trajIndex,0) + dyT));
     
