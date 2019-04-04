@@ -3,7 +3,7 @@ import interfascia.*;
 import java.io.*;
 
 //Interesting parameters
-String fullPath = "Documents/GAToptimization/";
+String fullPath = "..\\Desktop\\galaxy\\GAToptimization\\";
 int numPlanets = 8;
 float earthRadius = 3;
 float earthDist = 60;
@@ -13,7 +13,6 @@ float alpha = 1;
 GUIController c;
 IFButton[] buttons = new IFButton[8];
 IFButton deadButton = new IFButton(".",0,0,0,0);
-int fps = 30;
 IFButton[] sampleButtons = new IFButton[8];
 String[] samples = {"Sample 1","Sample 2","Sample 3","Sample 4","Sample 5","Sample 6","Sample 7","Sample 8"};
 int velocity;
