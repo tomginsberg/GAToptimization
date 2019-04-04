@@ -180,7 +180,7 @@ void draw() {
     
     cam = new PeasyCam(this,500);
     cam.rotateX(PI / 2);
-    cam.setWheelScale(.01);
+    cam.setWheelScale(1);
     
     logData = loadTable(logFile, "header");
     startTime = logData.getFloat(1,0);
@@ -232,7 +232,7 @@ void draw() {
     stroke(255,255,255);
     rotateX(PI/2);
     for(int i = 0; i < dp.length; i ++){
-        if ((i == 5 && (sampleNum == 2 || sampleNum == 4 || sampleNum == 6 || sampleNum == 5)) || (i == 4 && sampleNum ==3) || (i == 6 && sampleNum > 6)){
+        if ((i == 5 && (sampleNum == 2 || sampleNum == 4 )) || (i == 4 && sampleNum ==3) || (i == 6 && sampleNum == 7) || (i == 7 && sampleNum == 6 ) ){
           stroke(255, 0, 0);
         }else{
           stroke(255,255,255);
@@ -241,7 +241,7 @@ void draw() {
     }
     smooth();
     beginShape();
-      if ((!choseSample && dest == "Comet") || (choseSample && sampleNum == 1)){
+      if ((!choseSample && dest == "Comet") || (choseSample && (sampleNum == 1 || sampleNum == 8 || sampleNum == 5))){
         stroke(255, 0, 0);
       }
       curveVertex(earthDist*cometX[0], earthDist*cometY[0]); 
