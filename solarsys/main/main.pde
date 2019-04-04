@@ -7,16 +7,29 @@ String fullPath = "Documents/GAToptimization/";
 int numPlanets = 8;
 float earthRadius = 3;
 float earthDist = 60;
-float earthPeriod = 150;
-
+float earthPeriod = 250;
+float alpha = 1;
 //Non-Interesting parameters (Do not touch)
 GUIController c;
 IFButton[] buttons = new IFButton[8];
+IFButton deadButton = new IFButton(".",0,0,0,0);
+int fps = 30;
+IFButton[] sampleButtons = new IFButton[8];
+String[] samples = {"Sample 1","Sample 2","Sample 3","Sample 4","Sample 5","Sample 6","Sample 7","Sample 8"};
+int velocity;
+String logFile;
+String dataFile;
+float elapsed;
+boolean leftCoded = false;
+boolean rightCoded = false;
+
 String dest = "Comet";
 String[] planets = {"Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Comet"};
 PShader nebula;
 PFont cmu;
 int programState = 0;
+boolean choseSample = false;
+int sampleNum = 0;
 
 Planet sun;
 Planet galaxy;
@@ -65,7 +78,7 @@ void setup() {
   
   c = new GUIController (this);
   
-  nebula = loadShader("nebula.glsl");
+  nebula = loadShader("nebula2.glsl");
   nebula.set("resolution", float(width), float(height));
   
   int bWidth = 80;
@@ -74,12 +87,22 @@ void setup() {
   int yB = 90;
 
   for(int i = 0; i < planets.length; i++){
-      buttons[i] = new IFButton (planets[i], xB+(bWidth+10)*i, yB, bWidth, bHeight);
+      buttons[i] = new IFButton(planets[i], xB+(bWidth+10)*i, yB, bWidth, bHeight);
       buttons[i].addActionListener(this);
       c.add(buttons[i]);
   }
+
+  for(int i = 0; i < samples.length; i++){
+      sampleButtons[i] = new IFButton(samples[i], xB+(bWidth+10)*i, yB + bHeight + 10, bWidth, bHeight);
+      sampleButtons[i].addActionListener(this);
+      c.add(sampleButtons[i]);
+  }
+  deadButton.addActionListener(this);
+  c.add(deadButton);
+
   cmu = loadFont("CMUSerif-Bold-48.vlw");
 }
+
 
 void draw() {
   if(programState == 0){
@@ -95,24 +118,39 @@ void draw() {
     textSize(16);
     text("By David Black, Tom Ginsberg, Bereket Guta, Calum Macdonald, and Jeremy Wong",20,70);
     textSize(26);
-    text("Selected "+dest+". Press Enter to Generate Trajectory", 20, 150);
+    if (choseSample){
+        text("Selected Sample "+sampleNum+". Press Enter to View", 20, 190);
+    }else{
+      text("Selected "+dest+". Press Enter to Generate Trajectory", 20, 190);
+    }
     
   }else if(programState == 1){  
     textSize(26);
-    text("Please wait while we evolve towards the optimal trajectory...", 20, 180);
-    cam = new PeasyCam(this,500);
-    cam.rotateX(PI / 2);
-    cam.setWheelScale(.01);
-    programState = 2;
+    if (choseSample){
+        text("Loading Sample...", 20, 215);
+    }else{
+      text("Please wait while we evolve towards the optimal trajectory...", 20, 215);
+    }
+
+    if (choseSample){
+        programState = 3;
+    }else{
+      programState = 2;
+    }
     for(IFButton b : buttons){
       c.remove(b);
     }
+    for(IFButton b : sampleButtons){
+      c.remove(b);
+    }
+    c.remove(deadButton);
+    
   }else if (programState == 2){
     String s = null;
     try {
         
         
-        Process p = Runtime.getRuntime().exec("python "+fullPath+"get_trajectory.py " + dest);
+        Process p = Runtime.getRuntime().exec("python "+fullPath+"MGA.py " + dest);
         
         BufferedReader stdInput = new BufferedReader(new 
              InputStreamReader(p.getInputStream()));
@@ -140,12 +178,19 @@ void draw() {
     }
     programState = 3;
   }else if(programState ==3){
-    logData = loadTable("log_sample.csv", "header");
-    startTime = logData.getFloat(0,0);
-    endTime = logData.getFloat(0,1);
     
+    cam = new PeasyCam(this,500);
+    cam.rotateX(PI / 2);
+    cam.setWheelScale(.01);
+    
+    logData = loadTable(logFile, "header");
+    startTime = logData.getFloat(1,0);
+    endTime = logData.getFloat(1,1);
+    programState = 4;
+  }else if(programState == 4){
+
     for(int i = 0; i < numPlanets; i++){
-      phases[i] += wp[i] * startTime * earthPeriod - PI/2 + logData.getFloat(1, i);
+      phases[i] += wp[i] * startTime * earthPeriod - PI/2 + logData.getFloat(3, i);
     }
     
     sun = new Planet(4 * earthRadius, 0, 0, sunTexture, new PVector(0,0,0), 0);
@@ -155,17 +200,25 @@ void draw() {
     comet = createShape(SPHERE, earthRadius);
     comet.setTexture(loadImage("comet.jpg"));
     points = cometX.length;
-    table = loadTable("data_sample.csv", "header");
+    table = loadTable(dataFile, "header");
     solL = table.getRowCount();
     
     time = startTime;
     totalTime = endTime-startTime;
-    programState = 4;
+    programState = 5;
     
-  }else if(programState == 4){
-    if (time < startTime + 2/earthPeriod){
+  }else if(programState == 5){
+    if (leftCoded && alpha > -1){
+      alpha -= .01;
+    }else if(rightCoded && alpha < 4){
+      alpha += .01;
+    }
+    if (time < startTime + 1/earthPeriod){
+      if (time < startTime){
+        time = startTime;
+      }
       delay(1000);
-    }else{ frameRate(30);}
+    }
     translate( -earthDist * (table.getFloat(trajIndex,1) + dxT), 0, -earthDist * (table.getFloat(trajIndex,0) + dyT));
     
     background(0);
@@ -173,18 +226,25 @@ void draw() {
     pointLight(255, 255, 255, 0, 0, 0);
     galaxy.show();
     sun.show();
-    //cam.lookAt( earthDist * (solX[floor(solL * (time % endTime)/endTime)] + dxT), 0, earthDist * (solY[floor(solL * (time % endTime)/endTime)] + dyT) );
-    
+    fill(255);
+    elapsed = time - startTime;
+    text("Years: "+elapsed,-300,-100,-300);
     noFill();
     stroke(255,255,255);
     rotateX(PI/2);
     for(int i = 0; i < dp.length; i ++){
+        if ((i == 5 && (sampleNum == 2 || sampleNum == 4 || sampleNum == 6 || sampleNum == 5)) || (i == 4 && sampleNum ==3) || (i == 6 && sampleNum > 6)){
+          stroke(255, 0, 0);
+        }else{
+          stroke(255,255,255);
+        }
         ellipse(0,0,2*dp[i],2*dp[i]);
     }
     smooth();
-    noFill();
-    stroke(255, 0, 0);
     beginShape();
+      if ((!choseSample && dest == "Comet") || (choseSample && sampleNum == 1)){
+        stroke(255, 0, 0);
+      }
       curveVertex(earthDist*cometX[0], earthDist*cometY[0]); 
       for (int i = 0; i < points ; i++){
         curveVertex(earthDist*cometX[i], earthDist*cometY[i]); 
@@ -192,21 +252,21 @@ void draw() {
       curveVertex(earthDist*cometX[0], earthDist*cometY[0]); 
       curveVertex(earthDist*cometX[0], earthDist*cometY[0]); 
     endShape();
-    
-    if (trajIndex < solL -2){
+    stroke(244, 161, 66);
+    if (trajIndex < solL - 2){
       
       cometIndexF = points * (time % cometPeriod)/cometPeriod;
       cometIndex = floor(cometIndexF);
       dxCom = (cometX[(cometIndex + 1) % points] - cometX[cometIndex])*(cometIndexF - cometIndex);
       dyCom = (cometY[(cometIndex + 1) % points] - cometY[cometIndex])*(cometIndexF - cometIndex);
       
-      stroke(244, 161, 66);
+      
       trajIndexF = solL * (time-startTime)/(totalTime);
       trajIndex = floor(trajIndexF);
       
       dxT = (table.getFloat(trajIndex + 1,1) - table.getFloat(trajIndex,1))*(trajIndexF - trajIndex);
       dyT = (table.getFloat(trajIndex + 1,0) - table.getFloat(trajIndex,0))*(trajIndexF - trajIndex);
-      sun.orbit(1);
+      sun.orbit(alpha);
     }
     shape(comet, earthDist * (cometX[cometIndex] + dxCom), earthDist * (cometY[cometIndex] + dyCom));
     
@@ -218,18 +278,57 @@ void draw() {
         curveVertex(earthDist * (table.getFloat(trajIndex,1) + dxT), earthDist * (table.getFloat(trajIndex,0) + dyT));
         curveVertex(earthDist * (table.getFloat(trajIndex,1) + dxT), earthDist * (table.getFloat(trajIndex,0) + dyT));     
     endShape();
-    time = time + 1/earthPeriod;
+    if (time < endTime){
+      time = time + 1/earthPeriod * alpha;
+    }
+
+    
   }
 }
+
 void keyPressed(){
-  if (keyCode == ENTER && programState == 0){
-    programState = 1; 
+  if (keyCode == ENTER){
+    if (programState==0){
+      programState = 1; 
+    }else if(programState==5){
+      time = startTime;
+      trajIndex = 0;
+      sun.spawnMoons();
+    }
+  }else if(keyCode == RIGHT){
+    rightCoded = true;
+  }
+  else if(keyCode == LEFT){
+    leftCoded = true;
+  }
+}
+void keyReleased(){
+  if(keyCode == RIGHT){
+    rightCoded = false;
+  }
+  else if(keyCode == LEFT){
+    leftCoded = false;
   }
 }
 void actionPerformed (GUIEvent e) {
-  for(int i = 0; i < planets.length; i++){
-    if (e.getSource() == buttons[i]) {
-        dest = planets[i];
+  if (programState == 0){
+    for(int i = 0; i < planets.length; i++){
+      if (e.getSource() == buttons[i]) {
+          dest = planets[i];
+          choseSample = false;
+          logFile = "log.csv";
+          dataFile = "data.csv";
+          println("Data "+dataFile+", Log "+logFile);
+      }
+    }
+    for(int i = 0; i < samples.length; i++){
+      if (e.getSource() == sampleButtons[i]) {
+          sampleNum = i + 1;
+          choseSample = true;
+          logFile = "log_sample"+sampleNum+".csv";
+          dataFile = "data_sample"+sampleNum+".csv";
+          println("Data "+dataFile+", Log "+logFile);
+      }
     }
   }
 }
