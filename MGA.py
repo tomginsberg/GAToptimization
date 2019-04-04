@@ -44,7 +44,7 @@ def optimize(log_output=False, dest='Mars'):
     else:
         max_enctrs = len(planets) - 2
         num_gens = 100
-        num_evolutions = 2
+        num_evolutions = 500
         pop_size = 20
     times = [0] + [0.1] * (max_enctrs + 1)
     max_times = [5] * (max_enctrs + 2)
@@ -52,7 +52,7 @@ def optimize(log_output=False, dest='Mars'):
     # optimize
     t0 = time.time()
     udp = gprob(planets, times, max_times, max_enctr=max_enctrs)
-    uda = pg.algorithm(pg.sade(gen=num_gens, memory=True))
+    uda = pg.algorithm(pg.sade(gen=num_gens, memory=False))
     if(not log_output):  # this avoids the persistent looping to get the fitness data
         archi = pg.archipelago(algo=uda, prob=udp, n=8, pop_size=pop_size)
         archi.evolve(num_evolutions)
@@ -94,7 +94,7 @@ def showlog(fitness_data, num_islands, num_evolutions, dest):
 
 if __name__ == '__main__':
     print("Generating Trajectory to {}".format(sys.argv[1]))
-    optimize(False, dest=sys.argv[1])
+    optimize(True, dest=sys.argv[1])
     #..\\Desktop\\galaxy\\GAToptimization\\
     subprocess.call("math -run < ..\\Desktop\\galaxy\\GAToptimization\\integrator.m", shell=True)
     print("Done")

@@ -93,7 +93,7 @@ void draw() {
     fill(255);
     textFont(cmu);
     textSize(36);
-    text("fps: " + round(frameRate), 1000, 50);
+    // text("fps: " + round(frameRate), 1000, 50);
     text("MGA Trajectory Optimizer: Choose a Destination",20,50);
     textSize(16);
     text("By David Black, Tom Ginsberg, Bereket Guta, Calum Macdonald, and Jeremy Wong",20,70);
