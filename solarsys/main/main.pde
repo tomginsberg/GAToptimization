@@ -106,7 +106,7 @@ void setup() {
 void draw() {
   if(programState == 0){
     background(0);
-    nebula.set("time", millis() / 500.0);  
+    nebula.set("time", (millis() / 1000.0)%146  );  
     shader(nebula); 
     rect(0, 0, width, height);
     resetShader();
