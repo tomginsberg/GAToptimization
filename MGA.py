@@ -43,9 +43,8 @@ def optimize(log_output=False, dest='Mars'):
         max_enctrs = 1
     else:
         max_enctrs = len(planets) - 2
-        num_gens = 100
-        num_evolutions = 500
-        pop_size = 20
+        num_gens = 20
+        num_evolutions = 30
     times = [0] + [0.1] * (max_enctrs + 1)
     max_times = [5] * (max_enctrs + 2)
 
@@ -94,7 +93,7 @@ def showlog(fitness_data, num_islands, num_evolutions, dest):
 
 if __name__ == '__main__':
     print("Generating Trajectory to {}".format(sys.argv[1]))
-    optimize(True, dest=sys.argv[1])
+    optimize(False, dest=sys.argv[1])
     #..\\Desktop\\galaxy\\GAToptimization\\
     subprocess.call("math -run < ..\\Desktop\\galaxy\\GAToptimization\\integrator.m", shell=True)
     print("Done")
