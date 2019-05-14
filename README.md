@@ -3,7 +3,7 @@
 ![](https://i.imgur.com/dMWAUWp.jpg)
 
 ## Background
-This was a project created for Applications of Classical Mechanics. The aim was to explore the problem of determining the optimal trajectory from Earth to a different point in the solar system using gravitational assists from other planets to minmize fuel consumption.
+This was a project created for Applications of Classical Mechanics. The aim was to explore the problem of determining the optimal trajectory from Earth to a different point in the solar system using gravitational assists from other planets to minimize fuel consumption.
 
 A big piece of inspiration was the [Rossetta Lander](https://www.youtube.com/watch?time_continue=26&v=iEQuE5N3rwQ&t=8s).
 
