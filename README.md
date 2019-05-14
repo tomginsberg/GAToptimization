@@ -1,14 +1,6 @@
----
-title: 'Project documentation template'
-disqus: hackmd
----
 
 # Gravity Assisted Trajectory Optimization
 ![](https://i.imgur.com/dMWAUWp.jpg)
-
-## Table of Contents
-
-[TOC]
 
 ## Background
 This was a project created for [Physics 350](https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=PHYS&course=350), Applications of Classical Mechanics. The aim of this project was to explore the optmization problem of determining the optimal trajectory from Earth to a different point in the solar system using gravitational assists from other planets to optimize fuel consumption.
