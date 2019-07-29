@@ -32,7 +32,7 @@ Opening screen. Destinations can be selected using butttons.
 
 **Demo Version will ONLY function with sample inputs**
 ---
-Sample screenshot. Mouse controls allow for full 3D panning, arrow keys allow for speed control. The eneter key can be pushed at any tiem to restart the current trajectory. The application must be restarted to return to the opening screen.
+Sample screenshot. Mouse controls allow for full 3D panning, arrow keys allow for speed control. The enter key can be pushed at any time to restart the current trajectory. The application must be restarted to return to the opening screen.
 
 ![](https://i.imgur.com/RmCkc0j.png)
 
