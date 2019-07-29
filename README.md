@@ -9,7 +9,7 @@ A big piece of inspiration was the [Rossetta Lander](https://www.youtube.com/wat
 
 More information can be found in the [project report](https://www.overleaf.com/read/ywpzdwdppbmm).
 
-## Requirments
+## Requirements
 ### Demo Version: *View Sample Trajectories*
 Your in luck all you need is [Processing](https://processing.org/download/).
 ### Full Version: *Create New Trajectories!*
